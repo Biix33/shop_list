@@ -33,7 +33,6 @@
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
       crossorigin="anonymous"
     ></script>
-    <script src="main.js"></script>
   </head>
   <body>
     <div id="shop-app">
@@ -43,14 +42,14 @@
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-8 inline-form">
-            <form action="">
+            <form action="" id="add-item">
               <div class="input-group">
-                <label for="article"></label>
+                <label for="item"></label>
                 <input
                   class="form-control"
                   type="text"
-                  name="article"
-                  id="article"
+                  name="item"
+                  id="item"
                   placeholder="Nouvel article"
                 />
                 <input
@@ -65,7 +64,7 @@
         <!-- shopping list -->
         <div class="row justify-content-center mt-3">
           <div class="col-8">
-            <ul class="list-group">
+            <ul class="list-group" id="list-item">
               <li class="list-group-item">
                 <div class="row">
                   <div class="col-md-9">
@@ -93,5 +92,6 @@
 
     <script src="item.js"></script>
     <script src="app.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>

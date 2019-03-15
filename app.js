@@ -19,8 +19,8 @@ function App() {
    * @param {string} name item's name
    */
   this.createItem = function createItem(name) {
-    if (this.doesExist(name)) {
-      addItem(nanme);
+    if (doesExist(name)) {
+      this.addItem(name);
     } else {
       list[name] = 1;
     }
@@ -39,7 +39,7 @@ function App() {
    * @param {string} name
    */
   this.addItem = function addItem(name) {
-    if (this.doesExist(name)) {
+    if (doesExist(name)) {
       list[name]++;
     } else {
       this.createItem(name);
@@ -51,7 +51,7 @@ function App() {
    * @param {sting} name
    */
   this.removeItem = function removeItem(name) {
-    if (this.doesExist(name)) {
+    if (doesExist(name)) {
       list[name]--;
       if (list[name] === 0) {
         this.deleteItem(name);
@@ -62,7 +62,7 @@ function App() {
   /**
    * @returns {Array}
    */
-  trhis.getItemList = function getItemList() {
+  this.getItemsList = function getItemsList() {
     const array = [];
 
     for (const key in list) {
@@ -71,6 +71,15 @@ function App() {
     }
 
     return array;
+  };
+
+  this.getItem = name => {
+    for (const item of this.getItemsList()) {
+      if ((item.name = name)) {
+        this.addItem(name);
+      }
+      return item;
+    }
   };
 
   this.clear = function clear() {
