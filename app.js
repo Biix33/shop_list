@@ -1,49 +1,46 @@
 function App() {
-  let list = {};
+  let list = { poulet: 1 };
 
   /**
    * Whether an item exists or not
    * @param {Item|string} item an instance of Item or a name
    * @returns {bool} true if the item is alrezdy on the list
    */
-  function doesExist(item) {
+  this.doesExist = function doesExist(item) {
     let name = item;
     if (item instanceof Item) {
       name = item.getName();
     }
-    return !!list[item]; //cast en booleen strict
-  }
+    return !!list[name]; //cast en booleen strict
+  };
 
   /**
-   * Create new item on the list
+   * Validate name format
    * @param {string} name item's name
    */
-  this.createItem = function createItem(name) {
-    if (doesExist(name)) {
-      this.addItem(name);
-    } else {
-      list[name] = 1;
+  function validateName(name) {
+    if (typeof name !== "string" || name === "") {
+      const e = new Error(
+        `Invalid parameter "${name}" [${typeof name}]. It must be a non empty string`
+      );
+      e.name = "InvalidParameter";
+      throw e;
     }
-  };
-
-  /**
-   * Delete an item from the list
-   * @param {string} name
-   */
-  this.deleteItem = function deleteItem(name) {
-    delete list[name];
-  };
+  }
 
   /**
    * Add 1 to the quantity of an existing item
    * @param {string} name
    */
   this.addItem = function addItem(name) {
-    if (doesExist(name)) {
+    validateName(name);
+
+    if (this.doesExist(name)) {
       list[name]++;
     } else {
-      this.createItem(name);
+      list[name] = 1;
     }
+    // return list[name];
   };
 
   /**
@@ -51,10 +48,12 @@ function App() {
    * @param {sting} name
    */
   this.removeItem = function removeItem(name) {
-    if (doesExist(name)) {
+    validateName(name);
+
+    if (this.doesExist(name)) {
       list[name]--;
       if (list[name] === 0) {
-        this.deleteItem(name);
+        delete list[name];
       }
     }
   };
@@ -73,12 +72,12 @@ function App() {
     return array;
   };
 
-  this.getItem = name => {
-    for (const item of this.getItemsList()) {
-      if ((item.name = name)) {
-        this.addItem(name);
+  this.getItemQuantity = name => {
+    for (const key in list) {
+      if (key == name) {
+        const element = list[key];
+        return element;
       }
-      return item;
     }
   };
 
