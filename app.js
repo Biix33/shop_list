@@ -1,5 +1,6 @@
 function App() {
-  let list = { poulet: 1 };
+  let list = {};
+  const shopCard = [];
 
   /**
    * Whether an item exists or not
@@ -53,7 +54,7 @@ function App() {
     if (this.doesExist(name)) {
       list[name]--;
       if (list[name] === 0) {
-        delete list[name];
+        this.deleteItem(name);
       }
     }
   };
@@ -72,13 +73,8 @@ function App() {
     return array;
   };
 
-  this.getItemQuantity = name => {
-    for (const key in list) {
-      if (key == name) {
-        const element = list[key];
-        return element;
-      }
-    }
+  this.deleteItem = name => {
+    delete list[name];
   };
 
   this.clear = function clear() {
