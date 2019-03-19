@@ -3,6 +3,8 @@ const app = new App();
 $(function() {
   const $list = $("#list-item");
 
+  render($list);
+
   $("#add-item").on("submit", function(event) {
     event.preventDefault();
 
@@ -44,6 +46,18 @@ $(function() {
 
     render($list);
   });
+
+  $($list).on("click", 'input[type="checkbox"]', function(event) {
+    const $target = $(event.currentTarget);
+    const item = $target.data("item");
+
+    if ($(this).prop("checked")) {
+      app.toggleItem(item);
+    } else {
+      app.toggleItem(item);
+    }
+    render($list);
+  });
 });
 
 function createLi(item) {
@@ -51,11 +65,11 @@ function createLi(item) {
                 <div class="row">
                   <div class="col-md-1">
                    <input type="checkbox" class="form-control" ${
-                     item.checked ? "checked" : ""
-                   }>
+                     app.getCardItems(item.name) ? "checked" : ""
+                   } data-item="${item.name}">
                   </div>
                   <div class="col-md-8 ${
-                    item.checked ? "item-name-checked" : ""
+                    app.getCardItems(item.name) ? "item-name-checked" : ""
                   }">
                     ${item.name}
                   </div>
@@ -63,13 +77,17 @@ function createLi(item) {
                     <div class="btn-group mr-2">
                       <button type="button" class="btn btn-secondary" data-action="remove" data-item="${
                         item.name
-                      }" ${item.checked ? "disabled" : ""}>-</button>
+                      }" ${
+    app.getCardItems(item.name) ? "disabled" : ""
+  }>-</button>
                       <button type="button" class="btn btn-secondary">${
                         item.quantity
                       }</button>
                       <button type="button" class="btn btn-secondary" data-action="add" data-item="${
                         item.name
-                      }"  ${item.checked ? "disabled" : ""}>+</button>
+                      }"  ${
+    app.getCardItems(item.name) ? "disabled" : ""
+  }>+</button>
                     </div>
                     <div class="btn-group">
                       <button type="button" class="btn btn-secondary" data-action="delete" data-item="${

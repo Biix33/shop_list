@@ -1,19 +1,19 @@
 function App() {
   let list = {};
-  const shopCard = [];
+  let shopCard = [];
 
   /**
    * Whether an item exists or not
    * @param {Item|string} item an instance of Item or a name
    * @returns {bool} true if the item is alrezdy on the list
    */
-  this.doesExist = function doesExist(item) {
+  function doesExist(item) {
     let name = item;
     if (item instanceof Item) {
       name = item.getName();
     }
     return !!list[name]; //cast en booleen strict
-  };
+  }
 
   /**
    * Validate name format
@@ -30,13 +30,52 @@ function App() {
   }
 
   /**
+   * Add item in card
+   * @param {string} name name of item to add to card
+   */
+  function addToCard(name) {
+    shopCard.push(name);
+  }
+
+  /**
+   * Remove item into card
+   * @param {string} name name of item to remove into card
+   */
+  function removeToCard(name) {
+    shopCard = shopCard.filter(n => n !== name);
+  }
+
+  /**
+   * Get list of items or just item
+   * @param {string} name name of item to get
+   */
+  this.getCardItems = function getCardItems(name) {
+    if (name === undefined) {
+      return shopCard.slice();
+    }
+    return shopCard.includes(name);
+  };
+
+  this.toggleItem = function toggleItem(name) {
+    validateName(name);
+
+    if (!doesExist(name)) return;
+
+    if (this.getCardItems(name)) {
+      removeToCard(name);
+    } else {
+      addToCard(name);
+    }
+  };
+
+  /**
    * Add 1 to the quantity of an existing item
    * @param {string} name
    */
   this.addItem = function addItem(name) {
     validateName(name);
 
-    if (this.doesExist(name)) {
+    if (doesExist(name)) {
       list[name]++;
     } else {
       list[name] = 1;
@@ -51,7 +90,7 @@ function App() {
   this.removeItem = function removeItem(name) {
     validateName(name);
 
-    if (this.doesExist(name)) {
+    if (doesExist(name)) {
       list[name]--;
       if (list[name] === 0) {
         this.deleteItem(name);
@@ -74,6 +113,9 @@ function App() {
   };
 
   this.deleteItem = name => {
+    if (this.getCardItems(name)) {
+      removeToCard(name);
+    }
     delete list[name];
   };
 
