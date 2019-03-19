@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Shop list</title>
+    <title>Shopping list</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
@@ -37,7 +37,8 @@
   <body>
     <div id="shop-app">
       <div class="jumbotron">
-        <h1 class="text-uppercase">Chérie pense aux bières</h1>
+        <h1 class="text-uppercase">Shopping list</h1>
+        <span class="text-uppercase">What we'll gone buy ?</span>
       </div>
       <div class="container-fluid">
         <div class="row justify-content-center">
@@ -57,6 +58,12 @@
                   type="submit"
                   value="Ajouter"
                 />
+                <input
+                  type="button"
+                  value="Vider la liste"
+                  class="btn btn-warning form-control"
+                  id="clearList"
+                />
               </div>
             </form>
           </div>
@@ -65,12 +72,11 @@
         <div class="row justify-content-center mt-3">
           <div class="col-md-8">
             <ul class="list-group" id="list-item"></ul>
+            <div id="status"></div>
           </div>
         </div>
       </div>
     </div>
-
-    <script src="item.js"></script>
     <script src="storage.js"></script>
     <script src="app.js"></script>
     <script src="main.js"></script>

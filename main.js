@@ -8,10 +8,10 @@ $(function() {
   $("#add-item").on("submit", function(event) {
     event.preventDefault();
 
-    const data = $("#item").val();
+    const data = $("#item");
 
     try {
-      app.addItem(data);
+      app.addItem(data.val());
       // update list view
       render($list);
     } catch (err) {
@@ -21,6 +21,8 @@ $(function() {
         throw err;
       }
     }
+
+    data.val("");
   });
 
   $($list).on("click", "button", function(event) {
@@ -58,6 +60,11 @@ $(function() {
     }
     render($list);
   });
+
+  $("#clearList").on("click", function() {
+    app.clear();
+    render($list);
+  })
 });
 
 function createLi(item) {
@@ -65,11 +72,11 @@ function createLi(item) {
                 <div class="row">
                   <div class="col-md-1">
                    <input type="checkbox" class="form-control" ${
-                     app.getCartItems(item.name) ? "checked" : ""
+                     item.checked ? "checked" : ""
                    } data-item="${item.name}">
                   </div>
                   <div class="col-md-8 ${
-                    app.getCartItems(item.name) ? "item-name-checked" : ""
+                    item.checked ? "item-name-checked" : ""
                   }">
                     ${item.name}
                   </div>
@@ -77,17 +84,13 @@ function createLi(item) {
                     <div class="btn-group mr-2">
                       <button type="button" class="btn btn-secondary" data-action="remove" data-item="${
                         item.name
-                      }" ${
-    app.getCartItems(item.name) ? "disabled" : ""
-  }>-</button>
+                      }" ${item.checked ? "disabled" : ""}>-</button>
                       <button type="button" class="btn btn-secondary">${
                         item.quantity
                       }</button>
                       <button type="button" class="btn btn-secondary" data-action="add" data-item="${
                         item.name
-                      }"  ${
-    app.getCartItems(item.name) ? "disabled" : ""
-  }>+</button>
+                      }"  ${item.checked ? "disabled" : ""}>+</button>
                     </div>
                     <div class="btn-group">
                       <button type="button" class="btn btn-secondary" data-action="delete" data-item="${
@@ -103,6 +106,7 @@ function createLi(item) {
 
 function render($list) {
   const items = app.getItemsList();
+  const completion = app.getCompletion();
 
   let html = "";
 
@@ -110,4 +114,27 @@ function render($list) {
     html += createLi(item);
   }
   $list.html(html);
+
+  let txt;
+  let cls;
+
+  if (!items.length) {
+    txt = "Votre liste de courses est vide...";
+    cls = "alert-light";
+  } else if (completion == 0) {
+    txt = "Les courses ne sont pas commencées !";
+    cls = "alert-warning";
+  } else if (completion === 100) {
+    txt = "Les courses sont terminées !";
+    cls = "alert-success";
+  } else {
+    txt = `Courses terminèes à ${completion.toFixed(2)}%`;
+    cls = "alert-info";
+  }
+
+  $list
+    .next()
+    .attr("class", cls)
+    .addClass("alert mt-2")
+    .text(txt);
 }

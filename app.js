@@ -131,8 +131,8 @@ function App(storage) {
   };
 
   this.deleteItem = name => {
-    if (this.getCardItems(name)) {
-      this.removeToCart(name);
+    if (this.getCartItems(name)) {
+      removeToCart(name);
     }
     delete list[name];
     storage.write(this.getItemsList());
@@ -142,5 +142,10 @@ function App(storage) {
     list = {};
     shopCart = [];
     storage.write(this.getItemsList());
+  };
+
+  this.getCompletion = () => {
+    const items = this.getItemsList();
+    return items.length ? (shopCart.length / items.length) * 100 : 0;
   };
 }
