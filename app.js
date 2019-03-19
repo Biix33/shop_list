@@ -19,9 +19,6 @@ function App(storage) {
    */
   doesExist = item => {
     let name = item;
-    if (item instanceof Item) {
-      name = item.getName();
-    }
     return !!list[name]; //cast en booleen strict
   };
 
