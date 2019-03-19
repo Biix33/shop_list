@@ -1,4 +1,4 @@
-const app = new App();
+const app = new App(new Storage());
 
 $(function() {
   const $list = $("#list-item");
@@ -65,11 +65,11 @@ function createLi(item) {
                 <div class="row">
                   <div class="col-md-1">
                    <input type="checkbox" class="form-control" ${
-                     app.getCardItems(item.name) ? "checked" : ""
+                     app.getCartItems(item.name) ? "checked" : ""
                    } data-item="${item.name}">
                   </div>
                   <div class="col-md-8 ${
-                    app.getCardItems(item.name) ? "item-name-checked" : ""
+                    app.getCartItems(item.name) ? "item-name-checked" : ""
                   }">
                     ${item.name}
                   </div>
@@ -78,7 +78,7 @@ function createLi(item) {
                       <button type="button" class="btn btn-secondary" data-action="remove" data-item="${
                         item.name
                       }" ${
-    app.getCardItems(item.name) ? "disabled" : ""
+    app.getCartItems(item.name) ? "disabled" : ""
   }>-</button>
                       <button type="button" class="btn btn-secondary">${
                         item.quantity
@@ -86,7 +86,7 @@ function createLi(item) {
                       <button type="button" class="btn btn-secondary" data-action="add" data-item="${
                         item.name
                       }"  ${
-    app.getCardItems(item.name) ? "disabled" : ""
+    app.getCartItems(item.name) ? "disabled" : ""
   }>+</button>
                     </div>
                     <div class="btn-group">

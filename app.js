@@ -1,25 +1,35 @@
-function App() {
+function App(storage) {
   let list = {};
-  let shopCard = [];
+  let shopCart = [];
+
+  const localData = storage.read();
+  if (localData && Array.isArray(localData)) {
+    for (const data of localData) {
+      list[data.name] = data.quantity;
+      if (data.checked) {
+        shopCart.push(data.name);
+      }
+    }
+  }
 
   /**
    * Whether an item exists or not
    * @param {Item|string} item an instance of Item or a name
    * @returns {bool} true if the item is alrezdy on the list
    */
-  function doesExist(item) {
+  doesExist = item => {
     let name = item;
     if (item instanceof Item) {
       name = item.getName();
     }
     return !!list[name]; //cast en booleen strict
-  }
+  };
 
   /**
    * Validate name format
    * @param {string} name item's name
    */
-  function validateName(name) {
+  validateName = name => {
     if (typeof name !== "string" || name === "") {
       const e = new Error(
         `Invalid parameter "${name}" [${typeof name}]. It must be a non empty string`
@@ -27,44 +37,46 @@ function App() {
       e.name = "InvalidParameter";
       throw e;
     }
-  }
+  };
 
   /**
    * Add item in card
    * @param {string} name name of item to add to card
    */
-  function addToCard(name) {
-    shopCard.push(name);
-  }
+  addToCart = name => {
+    shopCart.push(name);
+    storage.write(this.getItemsList());
+  };
 
   /**
    * Remove item into card
    * @param {string} name name of item to remove into card
    */
-  function removeToCard(name) {
-    shopCard = shopCard.filter(n => n !== name);
-  }
+  removeToCart = name => {
+    shopCart = shopCart.filter(n => n !== name);
+    storage.write(this.getItemsList());
+  };
 
   /**
    * Get list of items or just item
    * @param {string} name name of item to get
    */
-  this.getCardItems = function getCardItems(name) {
+  this.getCartItems = name => {
     if (name === undefined) {
-      return shopCard.slice();
+      return shopCart.slice();
     }
-    return shopCard.includes(name);
+    return shopCart.includes(name);
   };
 
-  this.toggleItem = function toggleItem(name) {
+  this.toggleItem = name => {
     validateName(name);
 
     if (!doesExist(name)) return;
 
-    if (this.getCardItems(name)) {
-      removeToCard(name);
+    if (this.getCartItems(name)) {
+      removeToCart(name);
     } else {
-      addToCard(name);
+      addToCart(name);
     }
   };
 
@@ -72,7 +84,7 @@ function App() {
    * Add 1 to the quantity of an existing item
    * @param {string} name
    */
-  this.addItem = function addItem(name) {
+  this.addItem = name => {
     validateName(name);
 
     if (doesExist(name)) {
@@ -80,33 +92,39 @@ function App() {
     } else {
       list[name] = 1;
     }
-    // return list[name];
+    storage.write(this.getItemsList());
   };
 
   /**
    * Romve 1 to the quantity of an existing item
    * @param {sting} name
    */
-  this.removeItem = function removeItem(name) {
+  this.removeItem = name => {
     validateName(name);
 
     if (doesExist(name)) {
       list[name]--;
       if (list[name] === 0) {
         this.deleteItem(name);
+        return;
       }
     }
+    storage.write(this.getItemsList());
   };
 
   /**
    * @returns {Array}
    */
-  this.getItemsList = function getItemsList() {
+  this.getItemsList = () => {
     const array = [];
 
     for (const key in list) {
       const value = list[key];
-      array.push({ name: key, quantity: value });
+      array.push({
+        name: key,
+        quantity: value,
+        checked: this.getCartItems(key)
+      });
     }
 
     return array;
@@ -114,12 +132,15 @@ function App() {
 
   this.deleteItem = name => {
     if (this.getCardItems(name)) {
-      removeToCard(name);
+      this.removeToCart(name);
     }
     delete list[name];
+    storage.write(this.getItemsList());
   };
 
   this.clear = function clear() {
     list = {};
+    shopCart = [];
+    storage.write(this.getItemsList());
   };
 }
