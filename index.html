@@ -57,6 +57,12 @@
                   type="submit"
                   value="Ajouter"
                 />
+                <input
+                  type="button"
+                  value="Vider la liste"
+                  class="btn btn-warning form-control"
+                  id="clearList"
+                />
               </div>
             </form>
           </div>
@@ -65,12 +71,11 @@
         <div class="row justify-content-center mt-3">
           <div class="col-md-8">
             <ul class="list-group" id="list-item"></ul>
+            <div id="status"></div>
           </div>
         </div>
       </div>
     </div>
-
-    <script src="item.js"></script>
     <script src="storage.js"></script>
     <script src="app.js"></script>
     <script src="main.js"></script>
