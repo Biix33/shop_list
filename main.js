@@ -11,8 +11,8 @@ $(function() {
     const data = $("#item");
 
     try {
-      app.addItem(data.val());
-      // update list view
+      // add item with strip html tags
+      app.addItem(data.val().replace(/(<([^>]+)>)/gi, ""));
       render($list);
     } catch (err) {
       if (err.name === "InvalidParameter") {
